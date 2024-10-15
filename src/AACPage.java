@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 /**
@@ -39,6 +40,7 @@ public interface AACPage {
 	 * @param imageLoc the location where the image is stored
 	 * @return if there is text to be spoken, it returns that information, otherwise
 	 * it returns the empty string
+	 * @throws IOException 
 	 * @throws NoSuchElementException if the image provided is not in the current 
 	 * category
 	 */
