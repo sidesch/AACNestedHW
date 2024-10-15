@@ -49,34 +49,44 @@ public class AACMappings implements AACPage {
 	 * @throws NullKeyException 
 	 * @throws Exception 
 	 */
-	public AACMappings(String filename) throws IOException {
+	public AACMappings(String filename) {
 		this.def = new AACCategory("");
 		this.current = this.def;
 		this.mappings = new AssociativeArray<String, AACCategory>();
-		FileReader fr = new FileReader(filename);
-		BufferedReader br = new BufferedReader(fr);
-		String ln = br.readLine();
-		while (ln != null) {
-			String[] words = ln.split(" ");
-			if (words.length <= 1) {
+		FileReader fr;
+		try {
+			fr = new FileReader(filename);
+			BufferedReader br = new BufferedReader(fr);
+			String ln;
+			try {
 				ln = br.readLine();
-				continue;
-			} // if
-			if (ln.charAt(0) == '>') {
-				this.current.addItem(words[0].substring(1), 
-														 ln.substring(words[0].length() + 1));
-			} else {
-				try {
-					this.current = new AACCategory(ln.substring(words[0].length() + 1));
-					this.mappings.set(words[0], this.current);
-				} catch (NullKeyException e) {
-					// do nothing
-				} // try-catch
-			} // if-else
-			ln = br.readLine();
-		} // while
-		this.current = this.def;
-		br.close();
+				while (ln != null) {
+					String[] words = ln.split(" ");
+					if (words.length <= 1) {
+						ln = br.readLine();
+						continue;
+					} // if
+					if (ln.charAt(0) == '>') {
+						this.current.addItem(words[0].substring(1), 
+																ln.substring(words[0].length() + 1));
+					} else {
+						try {
+							this.current = new AACCategory(ln.substring(words[0].length() + 1));
+							this.mappings.set(words[0], this.current);
+						} catch (NullKeyException e) {
+							// do nothing
+						} // try-catch
+					} // if-else
+					ln = br.readLine();
+				} // while
+				this.current = this.def;
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} // try-catch
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} // try-catch
 	} // AACMappings(String)
 	
 	/**
